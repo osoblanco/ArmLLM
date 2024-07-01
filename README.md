@@ -5,3 +5,5 @@
 
 
 Here you can find the materials for the [Armenian LLM Summer School](https://armllm.github.io/2024/) that took place in Yerevan, Armenia, from July 1 to July 7, 2024.
+
+For an overview of a quick setup on the provided machines please refer to `SETUP.md`
