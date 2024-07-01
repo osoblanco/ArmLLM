@@ -7,7 +7,7 @@ This practical session focuses on implementing a basic transformer model from sc
 In this session, we will:
 1. Implement a transformer encoder from scratch
 2. Use Hugging Face datasets to load and preprocess Cats vs. Dogs data
-3. Train our transformer on for image classification. Should get near 100%.
+3. Train our transformer on for image classification. Should get near ~40% trivially.
 
 ## Requirements
 
