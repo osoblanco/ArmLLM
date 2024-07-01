@@ -14,3 +14,8 @@ mamba install -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=1
 ```
 
 Mamba is faster implementation of Conda, so you can use it instead of conda without any cli syntax change.
+
+Finally, install python packages
+```
+pip install datasets transformers tqdm py-spy jupyter streamlit plotly pyinstrument tokenizers cached_path accelerate bitsandbytes trl
+```
