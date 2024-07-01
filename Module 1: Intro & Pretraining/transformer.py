@@ -79,14 +79,14 @@ class TransformerEncoder(nn.Module):
 # Data loading and preprocessing
 def load_and_preprocess_data():
     # Load the full dataset and split it
-    dataset = load_dataset("cats_vs_dogs", split="train[:5%]")
+    dataset = load_dataset("chriamue/bird-species-dataset", split="train[:5%]")
     train_dataset = dataset.train_test_split(test_size=0.1)  # 10% for validation
 
     image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224")
     
     def preprocess_image(example):
         inputs = image_processor(example["image"], return_tensors="pt")
-        return {"pixel_values": inputs.pixel_values.squeeze(0), "label": example["labels"]}
+        return {"pixel_values": inputs.pixel_values.squeeze(0), "label": example["label"]}
     
     train_dataset["train"] = train_dataset["train"].map(preprocess_image, remove_columns=["image"])
     train_dataset["train"].set_format(type="torch", columns=["pixel_values", "label"])
@@ -153,7 +153,7 @@ def main():
     num_heads = 8
     num_layers = 6
     d_ff = 1024
-    num_classes = 2
+    num_classes = 525
     batch_size = 32
     num_epochs = 10
     learning_rate = 0.0001
