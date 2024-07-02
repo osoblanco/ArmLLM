@@ -50,18 +50,7 @@ def find_multiple(n: int, k: int) -> int:
 # RMSNorm (Root Mean Square Layer Normalization)
 class RMSNorm(nn.Module):
     def __init__(self, dim: int, eps: float = 1e-6):
-        super().__init__()
-        self.eps = eps
-        self.weight = nn.Parameter(torch.ones(dim))
-
-    def _norm(self, x):
-        # Compute RMS normalization
-        return x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
-
-    def forward(self, x):
-        # Apply normalization and scaling
-        output = self._norm(x.float()).type_as(x)
-        return output * self.weight
+        raise NotImplementedError("RMSNorm not implemented yet")
 
 
 # Precompute frequency tensor for rotary positional embedding
@@ -137,7 +126,7 @@ class Attention(nn.Module):
         return self.wo(output)
 
 
-# Feedforward network
+# Feedforward network with SwiGLU
 class FeedForward(nn.Module):
     def __init__(self, dim: int, hidden_dim: int, multiple_of: int):
         super().__init__()
@@ -149,7 +138,7 @@ class FeedForward(nn.Module):
 
     def forward(self, x):
         # SwiGLU activation function
-        return self.w2(F.silu(self.w1(x)) * self.w3(x))
+        raise NotImplementedError("SwiGLU activation function not implemented yet")
 
 
 # Transformer block
@@ -207,10 +196,7 @@ class Transformer(nn.Module):
         # Create causal mask
         mask = None
         if seqlen > 1:
-            mask = torch.full(
-                (1, 1, seqlen, seqlen), float("-inf"), device=tokens.device
-            )
-            mask = torch.triu(mask, diagonal=start_pos + 1).type_as(h)
+            raise NotImplementedError("Causal mask not implemented yet")
 
         # Apply transformer layers
         for layer in self.layers:
