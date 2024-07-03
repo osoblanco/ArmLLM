@@ -325,19 +325,19 @@ def main():
     # Model configuration
     max_seq_len = 128
     model_args = ModelArgs(
-        dim=64,
-        n_layers=4,
-        n_heads=4,
-        n_kv_heads=4,
+        dim=128,
+        n_layers=64,
+        n_heads=64,
+        n_kv_heads=64,
         vocab_size=50257,  # GPT-2 vocab size
         multiple_of=32,
-        max_seq_len=max_seq_len,
+        max_seq_len=128,
         max_batch_size=32,
     )
 
     # Training configuration
-    batch_size = 16
-    num_epochs = 1
+    batch_size = 64
+    num_epochs = 100
     learning_rate = 5e-5
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

@@ -201,7 +201,7 @@ def repeat_kv(x: torch.Tensor, n_rep: int) -> torch.Tensor:
 
 def generate_text_greedy(model, tokenizer, prompt, max_length=50, temperature=1.0):
     model.eval()
-    input_ids = tokenizer.encode(prompt, return_tensors="pt")
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").cuda()
 
     with torch.no_grad():
         for _ in range(max_length):
@@ -218,28 +218,99 @@ def generate_text_greedy(model, tokenizer, prompt, max_length=50, temperature=1.
 
 
 def generate_text_sampling(model, tokenizer, prompt, max_length=50, temperature=1.0):
-    raise NotImplementedError("Sampling not implemented yet")
+    model.eval()
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").cuda()
 
+    with torch.no_grad():
+        for _ in range(max_length):
+            outputs = model(input_ids, start_pos=0)
+            next_token_logits = outputs[:, -1, :] / temperature
+            
+            # Apply softmax to get probabilities
+            probs = F.softmax(next_token_logits, dim=-1)
+            
+            # Sample from the probability distribution
+            next_token = torch.multinomial(probs, num_samples=1)
+            
+            input_ids = torch.cat([input_ids, next_token], dim=-1)
 
-def generate_text_topk(
-    model, tokenizer, prompt, max_length=50, temperature=1.0, topk=50
-):
-    raise NotImplementedError("Top-k sampling not implemented yet")
+            if next_token.item() == tokenizer.eos_token_id:
+                break
 
+    generated_text = tokenizer.decode(input_ids[0], skip_special_tokens=True)
+    return generated_text
 
-def generate_text_topp(
-    model, tokenizer, prompt, max_length=50, temperature=1.0, topp=0.9
-):
-    raise NotImplementedError("Top-k sampling not implemented yet")
+def generate_text_topk(model, tokenizer, prompt, max_length=50, temperature=1.0, topk=50):
+    model.eval()
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").cuda()
+
+    with torch.no_grad():
+        for _ in range(max_length):
+            outputs = model(input_ids, start_pos=0)
+            next_token_logits = outputs[:, -1, :] / temperature
+            
+            # Get the top-k logits and indices
+            top_k_logits, top_k_indices = torch.topk(next_token_logits, k=topk, dim=-1)
+            
+            # Apply softmax to get probabilities for top-k tokens
+            probs = F.softmax(top_k_logits, dim=-1)
+            
+            # Sample from the top-k probability distribution
+            next_token_index = torch.multinomial(probs, num_samples=1)
+            next_token = top_k_indices.gather(-1, next_token_index)
+            
+            input_ids = torch.cat([input_ids, next_token], dim=-1)
+
+            if next_token.item() == tokenizer.eos_token_id:
+                break
+
+    generated_text = tokenizer.decode(input_ids[0], skip_special_tokens=True)
+    return generated_text
+
+def generate_text_topp(model, tokenizer, prompt, max_length=50, temperature=1.0, topp=0.9):
+    model.eval()
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").cuda()
+
+    with torch.no_grad():
+        for _ in range(max_length):
+            outputs = model(input_ids, start_pos=0)
+            next_token_logits = outputs[:, -1, :] / temperature
+            
+            # Sort logits in descending order
+            sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+            
+            # Calculate cumulative probabilities
+            cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
+            
+            # Remove tokens with cumulative probability above the threshold
+            sorted_indices_to_remove = cumulative_probs > topp
+            # Shift the indices to the right to keep also the first token above the threshold
+            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+            sorted_indices_to_remove[..., 0] = 0
+            # Create a mask for indices to remove
+            indices_to_remove = sorted_indices_to_remove.scatter(1, sorted_indices, sorted_indices_to_remove)
+            # Set the logits of indices to remove to negative infinity
+            next_token_logits = next_token_logits.masked_fill(indices_to_remove, float('-inf'))
+            # Sample from the filtered distribution
+            probs = F.softmax(next_token_logits, dim=-1)
+            next_token = torch.multinomial(probs, num_samples=1)
+            
+            input_ids = torch.cat([input_ids, next_token], dim=-1)
+
+            if next_token.item() == tokenizer.eos_token_id:
+                break
+
+    generated_text = tokenizer.decode(input_ids[0], skip_special_tokens=True)
+    return generated_text
 
 
 def main():
     # Model configuration (make sure it matches the training configuration)
     model_args = ModelArgs(
-        dim=64,
-        n_layers=4,
-        n_heads=4,
-        n_kv_heads=4,
+        dim=128,
+        n_layers=64,
+        n_heads=64,
+        n_kv_heads=64,
         vocab_size=50257,  # GPT-2 vocab size
         multiple_of=32,
         max_seq_len=128,
@@ -259,10 +330,24 @@ def main():
 
     # Generate text
     prompt = "In a world where"
-    generated_text = generate_text(model, tokenizer, prompt, max_length=50)
-
-    print(f"Prompt: {prompt}")
+    print(f"Prompt: {prompt}\n")
+    print("Greedy Decoding")
+    generated_text = generate_text_greedy(model, tokenizer, prompt, max_length=50)
     print(f"Generated text: {generated_text}")
+    print("__"*30)
+    print("Sampling Decoding")
+    generated_text = generate_text_sampling(model, tokenizer, prompt, max_length=50)
+    print(f"Generated text: {generated_text}")
+    print("__"*30)
+    print("Top-K Decoding")
+    generated_text = generate_text_topk(model, tokenizer, prompt, max_length=50)
+    print(f"Generated text: {generated_text}")
+    print("__"*30)
+    print("Top-p / Nucleus Decoding")
+    generated_text = generate_text_topp(model, tokenizer, prompt, max_length=50)
+    print(f"Generated text: {generated_text}")
+
+
 
 
 if __name__ == "__main__":
