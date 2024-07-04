@@ -303,7 +303,6 @@ def generate_text_topp(model, tokenizer, prompt, max_length=50, temperature=1.0,
     generated_text = tokenizer.decode(input_ids[0], skip_special_tokens=True)
     return generated_text
 
-
 def main():
     # Model configuration (make sure it matches the training configuration)
     model_args = ModelArgs(
