@@ -216,7 +216,7 @@ class ViT_VQVAE(nn.Module):
         )
 
         # Calculate and print histogram of usage
-        usage_counts, _ = torch.histogram(self.vq.usage, bins=10)
+        usage_counts, _ = torch.histogram(self.vq.usage.cpu(), bins=10)
         print("Usage histogram:")
         for i, count in enumerate(usage_counts):
             print(f"Bin {i+1}: {count.item()}")
