@@ -79,22 +79,44 @@ class TransformerEncoder(nn.Module):
 # Data loading and preprocessing
 def load_and_preprocess_data():
     # Load the full dataset and split it
-    dataset = load_dataset("microsoft/cats_vs_dogs", trust_remote_code=True, split="train[:5%]")
+    dataset = load_dataset("microsoft/cats_vs_dogs", trust_remote_code=True, split="train").shuffle().take(1000)
     train_dataset = dataset.train_test_split(test_size=0.1)  # 10% for validation
 
-    image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224")
+    image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224", use_fast=True)
     
-    def preprocess_image(example):
-        try:
-            inputs = image_processor(example["image"], return_tensors="pt")
-        except:
-            return None
-        return {"pixel_values": inputs.pixel_values.squeeze(0), "label": example["labels"]}
+    def preprocess_batch(examples):
+        """Process a batch of images, skipping corrupted ones."""
+        pixel_values = []
+        labels = []
+        
+        for i in range(len(examples["image"])):
+            try:
+                if examples["image"][i] is not None:
+                    inputs = image_processor(examples["image"][i], return_tensors="pt")
+                    pixel_values.append(inputs.pixel_values.squeeze(0))
+                    labels.append(examples["labels"][i])
+            except Exception as e:
+                # Skip corrupted images
+                print(f"Skipping corrupted image at index {i}: {e}")
+                continue
+        
+        return {"pixel_values": pixel_values, "label": labels}
     
-    train_dataset["train"] = train_dataset["train"].map(preprocess_image, remove_columns=["image"])
+    # Process datasets with batched processing
+    train_dataset["train"] = train_dataset["train"].map(
+        preprocess_batch, 
+        remove_columns=["image", "labels"],
+        batched=True,
+        batch_size=100
+    )
     train_dataset["train"].set_format(type="torch", columns=["pixel_values", "label"])
     
-    train_dataset["test"] = train_dataset["test"].map(preprocess_image, remove_columns=["image"])
+    train_dataset["test"] = train_dataset["test"].map(
+        preprocess_batch,
+        remove_columns=["image", "labels"],
+        batched=True,
+        batch_size=100
+    )
     train_dataset["test"].set_format(type="torch", columns=["pixel_values", "label"])
     
     return train_dataset["train"], train_dataset["test"]
