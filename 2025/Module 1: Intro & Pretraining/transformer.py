@@ -85,7 +85,10 @@ def load_and_preprocess_data():
     image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224")
     
     def preprocess_image(example):
-        inputs = image_processor(example["image"], return_tensors="pt")
+        try:
+            inputs = image_processor(example["image"], return_tensors="pt")
+        except:
+            return None
         return {"pixel_values": inputs.pixel_values.squeeze(0), "label": example["labels"]}
     
     train_dataset["train"] = train_dataset["train"].map(preprocess_image, remove_columns=["image"])
