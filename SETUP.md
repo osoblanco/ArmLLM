@@ -1,3 +1,5 @@
+# General Setup
+
 The machines come with clean Ubuntu 22.04 images with CUDA drivers.
 
 Python is not installed, so we need install it manually. 
@@ -17,5 +19,32 @@ Mamba is faster implementation of Conda, so you can use it instead of conda with
 
 Finally, install python packages
 ```
-pip install datasets transformers tqdm py-spy jupyter streamlit plotly pyinstrument tokenizers cached_path accelerate bitsandbytes trl
+pip install datasets transformers tqdm py-spy jupyter streamlit plotly pyinstrument tokenizers cached_path accelerate bitsandbytes trl vllm
+```
+
+## Jupyter Notebooks
+
+To forward from local machine
+```bash
+ssh -L 8888:localhost:8888 username@remote_host
+```
+
+Then on the remote machine, start Jupyter:
+```bash
+jupyter notebook --no-browser --port=8888
+```
+
+Copy the URL with the token from the terminal output and paste it into your local browser.
+
+### Potential errors
+
+If for some unknown reason the port forwarding does not work. 
+
+```
+channel 3: open failed: connect failed: Connection refused
+```
+
+```
+sudo sed -i 's/^AllowTcpForwarding no$/AllowTcpForwarding yes/' /etc/ssh/sshd_config
+sudo systemctl restart ssh.service 
 ```
