@@ -143,7 +143,7 @@ class VisionLanguageModel(nn.Module):
         )  # [batch, num_patches, hidden_size]
 
         # Task: 4 Project vision features to language model space
-        projected_features =   # [batch, num_patches, lm_hidden_size]
+        projected_features = self.connector(vision_features)  # [batch, num_patches, lm_hidden_size]
 
         # Get language model embeddings
         inputs_embeds = self.language_model.get_input_embeddings()(input_ids)
@@ -215,7 +215,15 @@ class LaTeXOCRDataset(Dataset):
         instruction = "Convert the image to LaTeX: "
         full_text = instruction + text
 
-        # Tokenize
+        # Tokenize instruction separately to find its length
+        instruction_encoding = self.tokenizer(
+            instruction,
+            add_special_tokens=False,
+            return_tensors="pt",
+        )
+        instruction_length = instruction_encoding["input_ids"].shape[1]
+
+        # Tokenize full text
         encoding = self.tokenizer(
             full_text,
             truncation=True,
@@ -226,6 +234,10 @@ class LaTeXOCRDataset(Dataset):
 
         # Create labels (shift input_ids by 1 for autoregressive training)
         labels = encoding["input_ids"][0].clone()
+        
+        # Set instruction tokens to -100 (don't compute loss on instruction)
+        labels[:instruction_length] = -100
+        
         # Set padding tokens to -100 (ignore index)
         labels[labels == self.tokenizer.pad_token_id] = -100
 
