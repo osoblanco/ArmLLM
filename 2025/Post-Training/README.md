@@ -44,7 +44,7 @@ GRPO's reward depends on there being differences between different generations. 
 
 What about a model that has already been post-trained? How well can it learn this particular task and what happens?
 
-Change to `--model_name Qwen/Qwen-0.6B` which is a smaller but post-trained model and run it
+Change to `--model_name Qwen/Qwen3-0.6B` which is a smaller but post-trained model and run it
 
 RL can be pretty unstable. What happens if we increase the learning rate? Decrease the KL coefficient (that keeps the model close to initialization) ?
 
