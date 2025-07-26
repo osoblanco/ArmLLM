@@ -50,7 +50,7 @@ RL can be pretty unstable. What happens if we increase the learning rate? Decrea
 
 ## Let's look at some issues with GRPO?
 
-Let's look at some issues with GRPO as pointed out by this paper: \url{https://arxiv.org/abs/2503.20783}
+Let's look at some issues with GRPO as pointed out by this paper: https://arxiv.org/abs/2503.20783
 
 We've got three things to check out
 1. Is our prompt template actualling making our model worse?
@@ -72,4 +72,4 @@ Our correct answers are generally shorter than our wrong answers. What if we jus
 
 ## Citation
 
-This is a modification of the nano aha moment by Amirhossein and Milad et al, check it out here \url{https://github.com/McGill-NLP/nano-aha-moment}
+This is a modification of the nano aha moment by Amirhossein and Milad et al, check it out here https://github.com/McGill-NLP/nano-aha-moment
