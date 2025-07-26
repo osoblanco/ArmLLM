@@ -18,7 +18,7 @@ and follow the instructions
 
 ## Lets Reproduce Deepseek R1 (kinda) 
 
-Jiayi Pan made a little repro of Deepseek R1's "aha moment" see the tweets \url{https://x.com/jiayi_pirate/status/1882839370505621655}
+Jiayi Pan made a little repro of Deepseek R1's "aha moment" see the tweets https://x.com/jiayi_pirate/status/1882839370505621655
 
 For speed, we're using a smaller model that has better mid-training (Qwen3-1.7B-base vs Qwen2.5 used by Jiayi).
 
