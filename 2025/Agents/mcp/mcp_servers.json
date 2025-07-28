@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+                "-y", 
+                "@playwright/mcp@latest"
+            ],
+      "env": {
+        "DISPLAY": ":1"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "/Users/alexandre.drouin/dev/git/ArmLLM/2025/Agents/mcp/memory.json"
+      }
+    }
+  }
+}
