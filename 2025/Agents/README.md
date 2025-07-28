@@ -11,3 +11,4 @@
 
 1. [Tool Calling Tutorial](./tool_calling)
 2. [Web Agent Tutorial](./web_agent)
+3. [MCP Chatbot demo](./mcp/)
