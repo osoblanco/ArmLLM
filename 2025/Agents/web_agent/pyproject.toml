@@ -1,0 +1,16 @@
+[project]
+name = "web-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "browsergym-core>=0.14.1",
+    "browsergym-experiments>=0.14.1",
+    "browsergym-meta",
+    "numpy>=2.3.2",
+    "openai>=1.97.1",
+]
+
+[tool.uv.sources]
+browsergym-meta = { git = "https://github.com/ServiceNow/BrowserGym.git" }
