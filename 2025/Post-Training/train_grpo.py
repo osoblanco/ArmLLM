@@ -602,7 +602,7 @@ def main(args):
 
         # Sample responses
         outputs = inference_engine.generate(
-            prompt_token_ids=samples["input_ids"],
+            prompts=samples["prompt"],
             sampling_params=train_sampling_params,
         )
         all_generations = [list(g.token_ids) for out in outputs for g in out.outputs]

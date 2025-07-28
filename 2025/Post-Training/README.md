@@ -18,7 +18,7 @@ and follow the instructions
 
 ## Lets Reproduce Deepseek R1 (kinda) 
 
-Jiayi Pan made a little repro of Deepseek R1's "aha moment" see the tweets \url{https://x.com/jiayi_pirate/status/1882839370505621655}
+Jiayi Pan made a little repro of Deepseek R1's "aha moment" see the tweets https://x.com/jiayi_pirate/status/1882839370505621655
 
 For speed, we're using a smaller model that has better mid-training (Qwen3-1.7B-base vs Qwen2.5 used by Jiayi).
 
@@ -44,13 +44,13 @@ GRPO's reward depends on there being differences between different generations. 
 
 What about a model that has already been post-trained? How well can it learn this particular task and what happens?
 
-Change to `--model_name Qwen/Qwen-0.6B` which is a smaller but post-trained model and run it
+Change to `--model_name Qwen/Qwen3-0.6B` which is a smaller but post-trained model and run it
 
 RL can be pretty unstable. What happens if we increase the learning rate? Decrease the KL coefficient (that keeps the model close to initialization) ?
 
 ## Let's look at some issues with GRPO?
 
-Let's look at some issues with GRPO as pointed out by this paper: \url{https://arxiv.org/abs/2503.20783}
+Let's look at some issues with GRPO as pointed out by this paper: https://arxiv.org/abs/2503.20783
 
 We've got three things to check out
 1. Is our prompt template actualling making our model worse?
@@ -66,10 +66,38 @@ What happens if we use a weaker model for our experiments? `Qwen/Qwen2.5-0.5B-ba
 Can we figure out how good our model *will* be after training before training? One thing to look at is whether it *can* answer questions at all.
 To do this, we can look at the `train/pass_at_group` metric that tracks whether there was at least 1 answer in our group of `num_responses_per_prompt` that got it right. Can we increase the number of `num_responses_per_prompt` to try and get more signal?
 
-Let's try other models like a bigger / better version of 2.5 `Qwen/Qwen2.5-1.5B-base`. If that model doesn't work, let's take a model that has been SFTed on correct reasoning traces for countdown but with a slightly different template `CohenQu/Qwen2.5-1.5B_Countdown-v1`. What if we change the `PROMPT_TEMPLATE` to match it exactly?
+Let's try other models like a bigger / better version of 2.5 `Qwen/Qwen2.5-1.5B-base`. If that model doesn't work, let's take a model that has been SFTed on correct reasoning traces for countdown but with a slightly different template `CohenQu/Qwen2.5-1.5B_Countdown-v1` was finetuned on [CohenQu/count_down_all_strategies](https://huggingface.co/datasets/CohenQu/count_down_all_strategies/viewer/default/train) and uses a slightly different template. Try running with this using our template. You can also change the `PROMPT_TEMPLATE` to be closer to their by changing it to 
+
+```
+PROMPT_TEMPLATE = "Using the numbers {numbers}, create an equation that equals {target}. You can use basic arithmetic operations (+, -, *, /) and each number can only be used once. Show your work in <think> </think> tags, and return the final answer in <answer> </answer> tags."
+```
+
+You'll need to change to `def preprocess_example` to
+
+```python
+def preprocess_example(
+    example: Dict[str, Any],
+    tokenizer: AutoTokenizer,
+    PROMPT_TEMPLATE: str,
+):
+    numbers: List[int] = example["nums"]
+    target: int = example["target"]
+
+    prefix = [
+        {"role": "system", "content": SYSTEM_MESSAGE},
+        {
+            "role": "user",
+            "content": PROMPT_TEMPLATE.format(numbers=numbers, target=target),
+        },
+        {"role": "assistant", "content": "<think>"},
+    ]
+    input_ids = tokenizer.apply_chat_template(prefix, tokenize=True, continue_final_message=True)
+    prompt = tokenizer.decode(input_ids, skip_special_tokens=False, clean_up_tokenization_spaces=False)
+    return {"prompt": prompt, "input_ids": input_ids}
+```
 
 Our correct answers are generally shorter than our wrong answers. What if we just reduce our `--max_response_tokens` to something like `512`, now generating a shorter maximum length response. How does training proceed?
 
 ## Citation
 
-This is a modification of the nano aha moment by Amirhossein and Milad et al, check it out here \url{https://github.com/McGill-NLP/nano-aha-moment}
+This is a modification of the nano aha moment by Amirhossein and Milad et al, check it out here https://github.com/McGill-NLP/nano-aha-moment
