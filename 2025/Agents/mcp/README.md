@@ -1,6 +1,6 @@
 # Model Context Protocol Demo
 
-* This exercise must be run on your local machine, not on the remote server *
+**This exercise must be run on your local machine, not on the remote server**
 
 In this exercise, you will create an agent that uses tools provided by MCP servers. You will also learn to create your own tools and make them available to the agent.
 
