@@ -24,7 +24,7 @@ The base agent that is provided has access to two tools: a web browser and a [kn
 
 ### Exercise 2
 
-You will now see an example of a custom vLLM server.
+You will now see an example of a custom MCP server.
 
 * Take a look at the [custom_servers/weather](./custom_servers/weather/) directory
 * You will find a custom MCP server that uses our weather tool from the tool calling tutorial
