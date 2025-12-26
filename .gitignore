@@ -161,3 +161,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 *.pth
+# macOS system files
+.DS_Store
+
+# uv lock file
+uv.lock
