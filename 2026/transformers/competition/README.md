@@ -16,6 +16,23 @@ streamlit run leaderboard_app.py --server.address 0.0.0.0 \
 Students then open `http://<machine-public-ip>:8501` in a browser. Make sure
 port 8501 is open in the machine's firewall / cloud security group.
 
+### Keeping it up (no open ports / no root)
+
+If the machine has no publicly reachable port, use `watchdog.sh` instead of
+running streamlit directly. It keeps the app on `localhost:80` and publishes
+it through a Cloudflare quick tunnel, restarting either whenever they go
+down (single-instance; safe to invoke repeatedly, e.g. from `~/.bashrc`):
+
+```bash
+cp watchdog.sh ~/moe_competition_data/watchdog.sh && chmod +x ~/moe_competition_data/watchdog.sh
+# put the cloudflared binary at ~/moe_competition_data/bin/cloudflared, then:
+setsid ~/moe_competition_data/watchdog.sh < /dev/null > /dev/null 2>&1 &
+```
+
+The current public URL is always in `~/moe_competition_data/public_url.txt`
+(quick-tunnel URLs change whenever cloudflared restarts — re-announce it to
+students if that happens; `watchdog.log` records every restart).
+
 ## Data
 
 Everything is stored outside the repo in `~/moe_competition_data/`:
