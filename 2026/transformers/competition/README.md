@@ -1,42 +1,38 @@
 # Competition Leaderboard
 
-## Live leaderboard: https://unix-command-ronald-questionnaire.trycloudflare.com
-
-(This header is rewritten automatically by `watchdog.sh` whenever the tunnel
-URL changes — always check here for the current address.)
+## Live leaderboard: https://diabetes-way-letter-controlled.trycloudflare.com
 
 A Streamlit portal where students submit their team name, benchmark
 perplexity, and the code file they ran. Uploaded code is stored (never
 executed) so organizers can audit and re-run submissions.
 
-## Running the server
+## Production hosting (current setup)
 
-From this directory, in the class conda env (see root [SETUP.md](../../../SETUP.md)):
+The leaderboard runs on a dedicated public server (`139.59.213.111`):
 
-```bash
-streamlit run leaderboard_app.py --server.address 0.0.0.0 \
-    --server.port 8501 --server.headless true
-```
+- **Streamlit** as the non-root `leaderboard` user, managed by a systemd
+  unit (`moe-leaderboard.service`, `Restart=always`, enabled at boot),
+  bound to `127.0.0.1:8501`
+- **nginx** on port 80 reverse-proxying to it (with websocket upgrade
+  headers, which Streamlit requires)
+- Data in `/home/leaderboard/moe_competition_data/` (SQLite + uploaded
+  code + `benchmarks.json`)
 
-Students then open `http://<machine-public-ip>:8501` in a browser. Make sure
-port 8501 is open in the machine's firewall / cloud security group.
-
-### Keeping it up (no open ports / no root)
-
-If the machine has no publicly reachable port, use `watchdog.sh` instead of
-running streamlit directly. It keeps the app on `localhost:80` and publishes
-it through a Cloudflare quick tunnel, restarting either whenever they go
-down (single-instance; safe to invoke repeatedly, e.g. from `~/.bashrc`):
+To redeploy after changing `leaderboard_app.py`:
 
 ```bash
-cp watchdog.sh ~/moe_competition_data/watchdog.sh && chmod +x ~/moe_competition_data/watchdog.sh
-# put the cloudflared binary at ~/moe_competition_data/bin/cloudflared, then:
-setsid ~/moe_competition_data/watchdog.sh < /dev/null > /dev/null 2>&1 &
+scp leaderboard_app.py root@<server>:/home/leaderboard/app/
+ssh root@<server> systemctl restart moe-leaderboard
 ```
 
-The current public URL is always in `~/moe_competition_data/public_url.txt`
-(quick-tunnel URLs change whenever cloudflared restarts — re-announce it to
-students if that happens; `watchdog.log` records every restart).
+### Fallback: hosting without a public server
+
+`watchdog.sh` runs the app on any machine (no root or open ports needed)
+and publishes it through a Cloudflare quick tunnel, restarting either
+whenever they go down (single-instance; safe to invoke repeatedly, e.g.
+from `~/.bashrc`). Quick-tunnel URLs change on every cloudflared restart —
+the current one is written to `~/moe_competition_data/public_url.txt` and
+auto-committed into this README's header.
 
 ## Data
 
