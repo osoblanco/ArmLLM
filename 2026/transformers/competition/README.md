@@ -1,6 +1,6 @@
 # Competition Leaderboard
 
-## Live leaderboard: https://diabetes-way-letter-controlled.trycloudflare.com
+## Live leaderboard: http://139.59.213.111
 
 A Streamlit portal where students submit their team name, benchmark
 perplexity, and the code file they ran. Uploaded code is stored (never
