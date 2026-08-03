@@ -1,5 +1,10 @@
 # Competition Leaderboard
 
+## Live leaderboard: https://unix-command-ronald-questionnaire.trycloudflare.com
+
+(This header is rewritten automatically by `watchdog.sh` whenever the tunnel
+URL changes — always check here for the current address.)
+
 A Streamlit portal where students submit their team name, benchmark
 perplexity, and the code file they ran. Uploaded code is stored (never
 executed) so organizers can audit and re-run submissions.

@@ -14,7 +14,28 @@ CLOUDFLARED="$DATA/bin/cloudflared"
 LOG="$DATA/watchdog.log"
 URL_FILE="$DATA/public_url.txt"
 
+REPO="$HOME/do_not_touch"
+README_REL="2026/transformers/competition/README.md"
+
 log() { echo "$(date '+%F %T') $*" >> "$LOG"; }
+
+# Rewrite the "## Live leaderboard: ..." header in the competition README
+# and push it, so students always find the current URL on GitHub.
+update_readme_url() {
+    local url="$1"
+    git -C "$REPO" pull --ff-only origin main >> "$LOG" 2>&1 \
+        || log "WARN: git pull failed; updating README from local state"
+    sed -i "s|^## Live leaderboard: .*|## Live leaderboard: $url|" "$REPO/$README_REL"
+    if ! git -C "$REPO" diff --quiet -- "$README_REL"; then
+        git -C "$REPO" add "$README_REL" >> "$LOG" 2>&1
+        git -C "$REPO" commit -m "Update live leaderboard URL [watchdog auto-commit]" >> "$LOG" 2>&1
+        if git -C "$REPO" push origin main >> "$LOG" 2>&1; then
+            log "README URL updated and pushed: $url"
+        else
+            log "WARN: git push failed — README updated locally only"
+        fi
+    fi
+}
 
 # Single instance. The lock lives in /tmp (local tmpfs): flock is unreliable
 # on the network FS that holds $HOME (instances hang inside the lock call),
@@ -55,8 +76,11 @@ ensure_tunnel() {
         local url
         url=$(grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' "$DATA/cloudflared.log" | tail -1)
         if [ -n "$url" ]; then
+            local old_url
+            old_url=$(cat "$URL_FILE" 2>/dev/null)
             echo "$url" > "$URL_FILE"
             log "new public URL: $url"
+            [ "$url" != "$old_url" ] && update_readme_url "$url"
         else
             log "WARN: tunnel started but URL not found in log yet"
         fi
