@@ -144,7 +144,7 @@ with board_tab:
             )
         st.dataframe(
             board.drop(columns=["_benchmark"]),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
         st.caption("⭐ rows are organizer baselines. Teams are ranked by their best submission.")
