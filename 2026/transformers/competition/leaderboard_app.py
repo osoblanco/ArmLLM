@@ -26,6 +26,7 @@ DATA_DIR = Path.home() / "moe_competition_data"
 CODE_DIR = DATA_DIR / "code"
 DB_PATH = DATA_DIR / "submissions.db"
 BENCHMARKS_PATH = DATA_DIR / "benchmarks.json"
+AUDIT_PATH = DATA_DIR / "audit_results.json"
 
 MAX_CODE_BYTES = 1_000_000  # 1 MB is plenty for a single .py file
 MIN_PPL = 1.0  # perplexity is mathematically >= 1
@@ -54,6 +55,13 @@ def init_storage():
 def load_benchmarks():
     try:
         return json.loads(BENCHMARKS_PATH.read_text())
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def load_audits():
+    try:
+        return json.loads(AUDIT_PATH.read_text())
     except (json.JSONDecodeError, OSError):
         return []
 
@@ -129,7 +137,9 @@ st.caption(
     "Lower is better."
 )
 
-board_tab, submit_tab, rules_tab = st.tabs(["Leaderboard", "Submit", "Rules"])
+board_tab, audit_tab, submit_tab, rules_tab = st.tabs(
+    ["Leaderboard", "Submissions & Analysis", "Submit", "Rules"]
+)
 
 with board_tab:
     board = build_leaderboard()
@@ -148,6 +158,39 @@ with board_tab:
             hide_index=True,
         )
         st.caption("⭐ rows are organizer baselines. Teams are ranked by their best submission.")
+
+with audit_tab:
+    st.subheader("Every submission, audited")
+    st.caption(
+        "Each submission was statically audited against the competition rules "
+        "(frozen eval pipeline, parameter budgets, data usage), and flagged "
+        "entries were re-trained and re-evaluated by the organizers on the "
+        "class H100. ✅ pass · 🚩 flagged during audit · 🔬 = number verified "
+        "by an organizer re-run."
+    )
+    audits = load_audits()
+    if not audits:
+        st.info("No audit results published yet.")
+    for i, a in enumerate(audits):
+        icon = {"pass": "✅", "flag": "🚩", "fail": "❌"}.get(a["verdict"], "❔")
+        medal = {0: "🥇 ", 1: "🥈 ", 2: "🥉 "}.get(i, "")
+        rerun = " 🔬" if a.get("verified_by_rerun") else ""
+        title = f"{medal}{a['team']} — ppl {a['perplexity']:.2f}{rerun} {icon}"
+        with st.expander(title, expanded=(i < 3)):
+            claimed = str(a.get("claimed", ""))
+            if claimed and claimed != f"{a['perplexity']:.2f}".rstrip("0").rstrip("."):
+                st.markdown(f"**Claimed:** {claimed} → **official:** {a['perplexity']:.2f}")
+            st.markdown(f"**What they did:** {a['summary']}")
+            st.markdown(f"**Parameter budget:** {a['param_budget_analysis']}")
+            st.markdown(f"**Is the number plausible?** {a['ppl_plausibility']}")
+            if a.get("rule_violations"):
+                st.error("**Rule violations:**\n\n" + "\n".join(f"- {v}" for v in a["rule_violations"]))
+            if a.get("red_flags"):
+                st.warning("**Auditor notes:**\n\n" + "\n".join(f"- {f}" for f in a["red_flags"]))
+            st.caption(
+                f"File: `{a['file']}` · frozen eval pipeline intact: "
+                f"{'yes' if a.get('frozen_sections_intact') else 'NO'}"
+            )
 
 with submit_tab:
     st.subheader("Submit your result")
