@@ -209,7 +209,12 @@ def main():
     parser.add_argument("test_set", help="JSON or JSONL test set")
     parser.add_argument("--output", default="results.jsonl")
     parser.add_argument("--seed", type=int, help="optional reproducible shuffle seed")
-    parser.add_argument("--hours", type=float, default=2.0)
+    parser.add_argument(
+        "--hours",
+        type=float,
+        default=0.25,
+        help="total evaluation budget in hours (default: 0.25 = 15 minutes)",
+    )
     parser.add_argument("--endpoint", help="reuse an already-running matching vLLM server")
     args = parser.parse_args()
 
