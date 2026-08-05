@@ -1,6 +1,6 @@
 # Test-Time Compute Assignment
 
-You are given a deliberately simple test-time compute pipeline for a fixed Qwen3-1.7B model and a validation set containing 30 math problems. Each problem has a point value, and a correct solution earns that full number of points while an incorrect solution earns zero. Your objective is to improve the pipeline and maximize the total points it earns, then submit your best version for evaluation on a hidden test set. The hidden problems will have a similar distribution of difficulty and point values, but their point values will not be available to your pipeline. Point values are included in the validation set only to help you analyze and debug your approach; during evaluation, `solve()` receives only the problem text and model endpoint. The complete validation run has a 15-minute wall-clock budget, and the hidden test will use the same 15-minute budget.
+You are given a deliberately simple test-time compute pipeline for a fixed Qwen3-1.7B model and a validation set containing 30 math problems. Each problem has a point value, and a correct solution earns that full number of points while an incorrect solution earns zero. Your objective is to improve the pipeline and maximize the total points it earns, then submit your best version for evaluation on a hidden test set. The hidden problems will have a similar distribution of difficulty and point values, but their point values will not be available to your pipeline. Point values are included in the validation set only to help you analyze and debug your approach; during evaluation, `solve()` receives only the problem text and model endpoint. The problem-solving phase has a 15-minute wall-clock budget that begins after the model endpoint is ready, and the hidden test will use the same budget.
 
 ## Objective and scoring
 
@@ -131,7 +131,7 @@ python evaluator.py validation.jsonl \
 
 The evaluator reuses cached Qwen3-1.7B weights when available and otherwise downloads them once. It starts vLLM using `model_config.py`, shuffles the problems, evaluates them sequentially, saves each result immediately, and shuts the server down afterward.
 
-The 15-minute wall-clock limit applies to the complete evaluation, not separately to each problem. Model startup, every call made by your pipeline, and all other processing must fit within that total budget. The hidden test uses the same 15-minute limit. If the deadline is reached, the active call is interrupted and remaining problems receive no points.
+The 15-minute wall-clock limit applies to the complete problem-solving phase, not separately to each problem. The clock begins after the evaluator has started vLLM and confirmed that the model endpoint is ready, so model download and server startup are excluded. From that point onward, every model call made by your pipeline and all other processing must fit within the total budget. The hidden test uses the same 15-minute limit. If the deadline is reached, the active call is interrupted and remaining problems receive no points.
 
 ## Submission
 
