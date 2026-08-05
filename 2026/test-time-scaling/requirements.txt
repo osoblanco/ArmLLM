@@ -1,0 +1,3 @@
+vllm>=0.26.0
+openai>=2.0.0
+huggingface-hub>=0.30.0
