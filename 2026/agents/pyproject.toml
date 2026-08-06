@@ -1,0 +1,19 @@
+[project]
+name = "dvin-agent"
+version = "0.1.0"
+description = "ArmLLM 2026 Day 4 — build a tool-using agent, then build the thing that grades it"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.0",   # OpenAI-compatible client: works against vLLM, NIM, or a hosted API
+    "numpy>=1.26",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+leaderboard = ["streamlit>=1.40", "plotly>=5.24", "pandas>=2.2"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
