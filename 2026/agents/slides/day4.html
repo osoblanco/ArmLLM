@@ -66,7 +66,6 @@
   <h1>Agents &amp; Reasoning</h1>
   <p class="big dim">Build the referee before the player.</p>
   <p class="dim" style="margin-top:2em">Aram Markosyan · NVIDIA</p>
-  <aside>Don't start here. Start with the demo. This slide is just what's on screen while people sit down.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -81,7 +80,6 @@
   </table>
   <p class="dim">Doubling every <span class="acc">131 days</span> since 2023.</p>
   <p class="ref"><b>METR</b>, Time Horizon 1.1, 2026-01-29 · metr.org/blog/2026-1-29-time-horizon-1-1</p>
-  <aside>Nothing else in ML has a curve like this. Note the honest caveats: only 5 of 31 long tasks have measured human baselines, CIs are wide. We'll come back to why that matters.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -94,7 +92,6 @@
     <li>Environments became <span class="hi">synthesizable</span></li>
   </ul>
   <p class="ref"><b>SWE-bench Verified</b> leaderboards · <b>MCP</b> donated to the Agentic AI Foundation, Linux Foundation, Dec 2025 · <b>Qwen3.6-35B-A3B</b>, Apache 2.0, Apr 2026</p>
-  <aside>You are working on the fastest-moving thing in the field. That's the setup, now the puzzle.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -108,18 +105,15 @@
   </table>
   <p class="dim">A citizen asks a question. Answer it from the documents, or say you cannot.</p>
   <p class="ref"><b>Dvin</b>, capital of Arsacid Armenia from c. 335, seat of the Catholicosate from 484, destroyed 1236. The municipality is fictional <i>on purpose</i>: if the model can answer from memory, you are measuring memorisation rather than retrieval.</p>
-  <aside>Twenty seconds on this. They need just enough frame for the demo to make sense; the full tour comes at 13:50.</aside>
 </section>
 
 <section class="center" data-act="I · mechanism">
   <p class="huge">Same technology.<br>Watch this.</p>
   <p class="dim mono" style="margin-top:2em">uv run python demos.py cold-open</p>
-  <aside>RUN THE DEMO. Birth certificate → 2,000 AMD → correct. Then signage permit → 20,000 AMD → wrong; the real answer is 26,000. DO NOT EXPLAIN IT. Let it sit.</aside>
 </section>
 
 <section class="center" data-act="I · mechanism">
   <p class="huge">By 17:00 you will be able to<br>name that failure,<br>measure it, and fix it.</p>
-  <aside>Write it on the whiteboard. You will come back to this exact failure at 16:45 and they will diagnose it themselves.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -130,7 +124,6 @@
     <li>evaluated one?</li>
     <li>had one hijacked?</li>
   </ul>
-  <aside>Nearly every hand, then almost none, then none. The room has just demonstrated the shape of the day. Say that out loud.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -143,7 +136,6 @@
   </table>
   <pre>git clone … &amp;&amp; cd 2026/agents &amp;&amp; bash bootstrap.sh</pre>
   <p class="dim">Start that now if you haven't. It takes about twenty minutes and it will finish while we talk.</p>
-  <aside>Say this out loud at 09:12, the setup running in the background through Act I is the whole reason the 10:15 hands-on works.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -155,7 +147,6 @@ memory        the messages list
 stopping rule what ends it</pre>
   <p class="big">Everything else is a framework selling you something.</p>
   <p class="ref">Decomposition after <b>Anthropic</b>, <i>Building Effective Agents</i>, Dec 2024 · see <b>Code as Agent Harness</b>, arXiv:2605.18747, a 197-paper synthesis of the same layer</p>
-  <aside>150 lines. They'll have this file in their hands in an hour.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -169,7 +160,6 @@ stopping rule what ends it</pre>
      "k":     {"type": "integer"}},
    "required": ["query"]}}</pre>
   <p class="dim">The description is <span class="hi">prompt</span>. It is the only thing telling the model when to reach for this rather than something else.</p>
-  <aside>Students underrate this. Tool descriptions are load-bearing text, and improving them is one of the cheapest wins in milestone 3.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -180,7 +170,6 @@ stopping rule what ends it</pre>
 qwen3_coder   &lt;tool_call&gt;&lt;function=search&gt;&lt;parameter=query&gt;…
 llama3_json   {"name":"search","parameters":{…}}</pre>
   <p class="ref">Pick the wrong parser and vLLM starts, answers fluently, and never emits a tool call. Nothing errors. <b>Observed here</b>, 2026-08-04.</p>
-  <aside>This bit them last night on the actual class machines. Worth saying: the server looked healthy the entire time.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -191,7 +180,6 @@ llama3_json   {"name":"search","parameters":{…}}</pre>
  "content": "[{\"id\": \"inj-01\", \"score\": 18.1, …}]"}</pre>
   <p class="big">The model cannot tell a <span class="hi">fact</span> from an <span class="bad">instruction</span> in here.</p>
   <p class="dim">They arrive as the same tokens, in the same context, from the same field.</p>
-  <aside>Plant this now; it detonates at 13:30. Do not explain it yet.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -199,7 +187,6 @@ llama3_json   {"name":"search","parameters":{…}}</pre>
   <pre>observation = "ERROR: no document with id 'notice-2026-99'."</pre>
   <p class="big">A traceback ends the agent.<br>An error <span class="hi">it can read</span> lets it recover.</p>
   <p class="dim">Recovery is a capability. It is also the difference between an agent and a script.</p>
-  <aside>TODO 4 in agent.py enforces exactly this. Point at it.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -211,7 +198,6 @@ llama3_json   {"name":"search","parameters":{…}}</pre>
     <tr><td class="bad">never</td><td class="dim">you forgot to write one</td></tr>
   </table>
   <p class="big" style="margin-top:.6em">Only the first is success.<br>The evaluator records which one happened.</p>
-  <aside>MOTIF, first costume: who says stop? Foreshadow that 15 of our 40 tasks end in max_steps, and why that is not the same failure as a wrong answer.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -227,7 +213,6 @@ tool:      # Zoning certificate … Fee: 15,000 AMD …
 assistant: → finish({"answer":"15,000 AMD"})</pre>
   <p class="dim">There is no agent. There is a while-loop and a list of strings.</p>
   <p class="ref">Illustrative transcript from <span class="mono">agent_solution.py</span> against the Dvin corpus, run <span class="mono">demos.py transcript</span> for the live version</p>
-  <aside>Show the real thing with demos.py transcript. The point: nothing here is magic, and nothing here is checking anything.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -235,7 +220,6 @@ assistant: → finish({"answer":"15,000 AMD"})</pre>
   <p class="big">Tool selection <span class="hi">is a router</span>, over a much larger, worse-conditioned vocabulary.</p>
   <p class="dim">Which is why routing accuracy decays <span class="acc">logarithmically</span> with library size.</p>
   <p class="ref"><b>The Scaling Laws of Skills in LLM Agent Systems</b>, arXiv:2605.16508, 15 frontier models, 3M+ routing decisions</p>
-  <aside>They implemented top-k dispatch and a load-balancing loss by hand on Monday. Use that. Also: the model serving them today is 35B total / 3B active, the exact asymmetry Erik's exercise was about.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -243,7 +227,6 @@ assistant: → finish({"answer":"15,000 AMD"})</pre>
   <p class="num bad">0.95<sup>10</sup> = 0.60</p>
   <p class="big" style="margin-top:.6em">95% reliable per step.<br>Ten steps. Coin flip.</p>
   <p class="ref">Arithmetic. The empirical claim that failures compound nonlinearly with task length: <b>Beyond the Leaderboard</b>, arXiv:2607.05775, 27 papers, 19 benchmarks</p>
-  <aside>Failures compound nonlinearly with task length. This is the single most important number in agent engineering and it needs no citation.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -257,7 +240,6 @@ assistant: → finish({"answer":"15,000 AMD"})</pre>
     <tr><td class="bad">measurement</td><td class="dim">the number was never valid</td></tr>
   </table>
   <p class="ref"><b>Beyond the Leaderboard</b>, arXiv:2607.05775, a synthesis of 27 benchmark, taxonomy and audit papers across 19 benchmarks, 2023–2026. Their finding: additional scaffolding does <i>not</i> consistently improve reliability.</p>
-  <aside>You will classify your own failures into buckets like these at 14:45. Tell them the taxonomy is a starting point, not gospel, writing their own is the exercise.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -278,7 +260,6 @@ step 4   prompt = the above + …                       ~7,300</pre>
  3       1672   +843   █████████████████████</pre>
   <p class="big">Three steps. Watch the <span class="hi">increments</span> grow,<br>not only the total.</p>
   <p class="ref"><b>Measured here</b><span class="mono">demos.py transcript</span>, Dvin corpus, Qwen3.6-35B-A3B-FP8</p>
-  <aside>From demos.py transcript, on our own corpus. Cost grows faster than step count. That's why context management is engineering, not tidiness.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -299,14 +280,12 @@ step 4   prompt = the above + …                       ~7,300</pre>
   <h1>Read the loop.</h1>
   <pre>agent_solution.py, run()</pre>
   <p class="dim">Every idea from the last half hour, in one function, in about forty lines.</p>
-  <aside>LIVE CODE. Do not slide through this. Scroll the actual file: messages list, chat call, tool dispatch, observation append, the finish branch, the max_steps fall-through. Then hand it to them with the TODOs cut out.</aside>
 </section>
 
 <section class="center" data-act="I · mechanism">
   <p class="huge">The 09:05 failure was not<br>the model's fault.</p>
   <p class="big dim">The tool succeeded. The document was real.<br>Nothing in that loop was allowed to notice it was stale.</p>
   <p class="ref">The superseding notice is dated 2026-03-19 and raises the fee to 26,000 AMD. BM25 ranks the stale service page above it, the page repeats the phrase five times, the notice once.</p>
-  <aside>First appearance of the motif: WHO SAYS NO? There was no stopping rule for "this document is out of date". Nobody was authorised to check.</aside>
 </section>
 
 <section data-act="I · mechanism">
@@ -327,7 +306,6 @@ step 4   prompt = the above + …                       ~7,300</pre>
   <p class="huge">An agent score is a property of<br><span class="acc">model × scaffold × harness × budget</span></p>
   <p class="dim">Not of the model.</p>
   <p class="ref"><b>Holistic Agent Leaderboard (HAL)</b>, arXiv:2510.11977, 21,730 rollouts, 9 models × 9 benchmarks, ~$40k, 2.5B tokens of logs released</p>
-  <aside>arXiv 2510.11977. They also released 2.5B tokens of logs. Hold the counterintuitive finding for Act II.</aside>
 </section>
 
 <section class="center" data-act="I · mechanism">
@@ -342,7 +320,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
 
 <section class="center" data-act="II · measurement">
   <p class="huge">How would you tell me<br>your agent works?</p>
-  <aside>Take answers. Someone will say accuracy. Write it up. Then the next three slides.</aside>
 </section>
 
 <section class="center" data-act="II · measurement">
@@ -357,7 +334,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </table>
   <p class="big" style="margin-top:.6em">Ask it eight times and it is right every time<br>on a quarter of the tasks.</p>
   <p class="ref"><b>τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains</b>, Yao et al., Sierra, arXiv:2406.12045. GPT-4o on τ-retail. Note the direction: pass@k flatters an agent as k rises, pass<sup>k</sup> punishes it.</p>
-  <aside>Say the difference out loud. Half the room will read the superscript as pass@k and conclude the opposite. The number they would have reported is 61; the number a customer experiences is 25.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -376,7 +352,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </table>
   <p class="big" style="margin-top:.6em">None of these are hypothetical.<br>All four were found by people <span class="hi">auditing their own benchmarks</span>.</p>
   <p class="ref"><b>HAL</b> arXiv:2510.11977, 21,730 rollouts across 9 models and 9 benchmarks · <b>Agentic Benchmark Checklist</b> arXiv:2507.02825 · <b>Search-Time Contamination in Deep Research Agents</b> arXiv:2606.05241</p>
-  <aside>The last line is the point. These are not critiques from outside; they are what the benchmark authors found when they looked. Saturday's jury will ask whether you looked at yours.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -388,7 +363,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </table>
   <p class="big" style="margin-top:.5em">Your agent did not reason. It <span class="bad">looked it up</span>.</p>
   <p class="ref"><b>Search-Time Contamination in Deep Research Agents</b>, arXiv:2606.05241, up to 4% inflation; for ~3% of questions the agent finds ground-truth labels on HuggingFace</p>
-  <aside>Directly relevant Saturday: any team giving their agent web search on a public dataset has this.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -417,7 +391,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </table>
   <p class="big" style="margin-top:.5em">If two humans cannot agree with your rubric,<br>the <span class="bad">rubric</span> is broken. Not the judge.</p>
   <p class="ref">κ is agreement corrected for chance: raw percentage agreement flatters you badly on skewed labels, where both raters say &quot;correct&quot; most of the time anyway. Trajectory judging adds biases text judging does not have, including <b>argument blindness</b>, failing to notice a wrong value passed to a tool. <b>BabelJudge</b>, arXiv:2606.22329, on judge reliability across languages and trajectories.</p>
-  <aside>Define κ out loud, the same way you did pass^k. And say why step 3 comes last: measuring a judge against labels two people could not agree on tells you nothing.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -431,7 +404,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </table>
   <p class="dim">14 models, 18 months: accuracy climbed steadily, <span class="warn">reliability barely moved</span>.</p>
   <p class="ref"><b>Towards a Science of AI Agent Reliability</b>, arXiv:2602.16666. GAIA and τ-bench, early 2024 to late 2025</p>
-  <aside>arXiv 2602.16666. Discrimination on GAIA actually got WORSE while calibration improved. These four axes map one-to-one onto Saturday's jury rubric.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -444,7 +416,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
   </ul>
   <p class="big" style="margin-top:.8em">No reset, no evaluation.<br>And certainly no training.</p>
   <p class="ref">Agentic RL as a temporally extended POMDP. <b>The Landscape of Agentic RL for LLMs</b>, ICLR 2026 · reproducible cost-controlled protocol: <b>AstaBench</b>, arXiv:2510.21652</p>
-  <aside>MOTIF: who decides it succeeded? Second costume. Same object as the stopping rule.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -457,7 +428,6 @@ uv run python agent.py "What is the fee for a zoning certificate in Dvin?"</pre>
     <tr><td class="bad">judge</td><td class="dim">last resort, now you have two things to validate</td></tr>
   </table>
   <p class="dim"><span class="mono">verify.py</span> is 120 lines. It is worth more than the agent: the agent is a checkpoint that expires.</p>
-  <aside>Push them hard toward the first three. Reach for a judge only when the answer is genuinely open-ended.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -468,7 +438,6 @@ abstained_on_answerable   declined when the answer was there
 gave_up                   never stopped searching
 wrong_number              had the right document, misread it</pre>
   <p class="big">"62%" tells you nothing.<br>A <span class="hi">histogram of failures</span> tells you what to fix.</p>
-  <aside>Ours reports these automatically. At 14:45 they classify ten by hand anyway, because the automatic label is a hypothesis.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -477,7 +446,6 @@ wrong_number              had the right document, misread it</pre>
   <p class="big">percentage points, at 40 items, 95% confidence.</p>
   <p class="big hi" style="margin-top:.4em">A three-point improvement is noise.</p>
   <p class="dim">And a category with 8 items? One question is 12.5 points. You cannot detect anything there.</p>
-  <aside>This is why our by-kind table prints n and a CI next to every number. A benchmark category with 64 questions moves 1.56 points per item, so it cannot detect a small improvement at all.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -501,7 +469,6 @@ sort them; take the 2.5th and 97.5th percentiles</pre>
   <p class="big hi">At temperature 0 there is nothing to vary,<br>so the two are equal and you have learned nothing.</p>
   <p class="dim">Measure at the temperature you will actually deploy at. And note that a batched server is not fully deterministic even at 0: batch composition changes the order of floating-point reductions.</p>
   <p class="ref"><b>Measured here</b>, 2026-08-05, 40 tasks × 3 runs at temperature 0: pass³ = accuracy = 87.5%. Try <span class="mono">--temperature 0.7 --repeats 3</span> and watch the gap open.</p>
-  <aside>Honest note: our own run does not show the reliability gap, because it is deterministic. Tell them that, and tell them how to make it appear.</aside>
 </section>
 
 <section class="center" data-act="II · measurement">
@@ -530,7 +497,6 @@ sort them; take the 2.5th and 97.5th percentiles</pre>
     <tr><td class="dim">bandit</td><td class="hi">a POMDP</td></tr>
   </table>
   <p class="ref"><b>The Landscape of Agentic Reinforcement Learning for LLMs</b>, ICLR 2026, agentic RL as a temporally extended POMDP with environment-grounded rewards</p>
-  <aside>Build on Edgar's Day 2 rather than repeating it. Ask the room what breaks first, masking usually comes up.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -540,7 +506,6 @@ sort them; take the 2.5th and 97.5th percentiles</pre>
 [tool] "…8,000 AMD…"       ← the environment said this. mask it.
 [assistant] finish(…)      ← TRAIN on this</pre>
   <p class="big">Forget the mask and you teach the model to hallucinate tool output.</p>
-  <aside>The single most common bug in a first agentic-SFT pipeline.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -573,7 +538,6 @@ reset        regenerate from a seed, byte for byte</pre>
   <h1>Read the world.</h1>
   <pre>world/build.py</pre>
   <p class="dim">One structured world emits the documents, the questions <i>and</i> the verifiers.<br>Ground truth is correct by construction, not by inspection.</p>
-  <aside>LIVE CODE. Show the dated fee amendments, that is the mechanism behind the 09:05 failure, and they will not have connected it yet.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -591,7 +555,6 @@ reset        regenerate from a seed, byte for byte</pre>
   <p class="huge">Training inside a <span class="acc">simulated</span> environment<br>beat training in the real one.</p>
   <p class="dim">A language world model that predicts the next environment state.<br>MCP, Search, Terminal, SWE, Android, Web, OS.</p>
   <p class="ref"><b>Qwen-AgentWorld: Language World Models for General Agents</b>, arXiv:2606.24597, June 2026 · see also <b>Agent World Model</b> arXiv:2602.10090</p>
-  <aside>2606.24597. The environment stopped being scenery and became a model. This is the most striking result of the year and it lands here because they now know why environments matter.</aside>
 </section>
 
 <section data-act="II · measurement">
@@ -599,13 +562,11 @@ reset        regenerate from a seed, byte for byte</pre>
   <p class="big">Rejection sampling on final answers rewards <span class="bad">lucky-wrong paths</span>.</p>
   <p class="big hi" style="margin-top:.8em">A bad referee trains a bad agent.</p>
   <p class="ref"><b>Reward Hacking in Rubric-Based RL</b>, arXiv:2605.12474 · same mechanism as filtering benchmark items on model failure</p>
-  <aside>Same mechanism as filtering benchmark items on model failure: you concentrate exactly the error you were trying to remove.</aside>
 </section>
 
 <section class="center" data-act="II · measurement">
   <p class="huge">The environment<br>is the artifact.</p>
   <p class="big dim">The model is a checkpoint that expires.<br>The environment is what lets you evaluate the next one.</p>
-  <aside>THE THESIS. Say it here, at the midpoint, where it has been earned. Not before.</aside>
 </section>
 
 <section class="center" data-act="II · measurement">
@@ -625,7 +586,6 @@ reset        regenerate from a seed, byte for byte</pre>
   <pre>ls corpus/notice-*n-fee*        # 5 fees a later notice changed
 grep -l "set annually" corpus/*  # 2 fees never published
 grep -l Prerequisite corpus/*    # services that need another first</pre>
-  <aside>Ten minutes is tight, so the template is on the slide. Push them toward a hard one: a fee that a later notice changed, or something the corpus genuinely does not say. An eval where everything passes measures nothing.</aside>
 </section>
 
 <!-- ══════════════════ ACT III. FAILURE ══════════════════ -->
@@ -667,7 +627,6 @@ for step in plan:
   </table>
   <p class="big" style="margin-top:.8em">Four fifths of multi-agent failure<br>is caused by <span class="hi">having multiple agents</span>.</p>
   <p class="ref"><b>Why Do Multi-Agent LLM Systems Fail?</b> Cemri et al., arXiv:2503.13657. MAST taxonomy, 14 failure modes over 1,600+ traces across 7 frameworks, 6 annotators, Cohen&#39;s κ = 0.88 · counter-evidence: Anthropic multi-agent research system, +90.2% on breadth-first research, 2025-06</p>
-  <aside>MAST taxonomy, NeurIPS 2025. The counter-evidence is real too. Anthropic's research system beat single-agent by 90% on breadth-first search. Discriminator: are the subtasks independent and read-only?</aside>
 </section>
 
 <section data-act="III · failure">
@@ -683,7 +642,6 @@ for step in plan:
 
 <section class="center" data-act="III · failure">
   <p class="huge">You may add structure only when<br>a <span class="acc">measurement</span> shows the simpler<br>design cannot do the job.</p>
-  <aside>The referee picks the architecture. Third costume of the motif.</aside>
 </section>
 
 <section data-act="III · failure">
@@ -705,7 +663,6 @@ after      30 tokens: "Parking permit raised to 11,000 AMD on
   <p class="big">You do this because the context window is finite.<br>You are betting the summary kept what the <span class="hi">next step</span> needs.</p>
   <p class="dim">Lose the wrong detail and the agent carries on confidently without it, which looks exactly like the agent carrying on correctly.</p>
   <p class="ref">Two recent directions: <b>CompactionRL</b> arXiv:2607.05378 trains the model to compact rather than prompting it to, and <b>Slipstream</b> arXiv:2605.08580 checks a compaction against the trajectory it replaced, so the bet is measurable instead of assumed.</p>
-  <aside>The failure is invisible, which is why it belongs in this act. Nothing errors. The agent just stops knowing something it knew a minute ago.</aside>
 </section>
 
 <section data-act="III · failure">
@@ -739,26 +696,17 @@ after      30 tokens: "Parking permit raised to 11,000 AMD on
   <p class="big" style="margin-top:.5em"><span class="hi">12×</span>, and nothing about the model changed.</p>
   <p class="dim">The model was writing three hundred tokens of reasoning to decide it should call <span class="mono">search</span>, an action the tool performs anyway. And with CUDA graphs off, every single token pays the full launch cost across forty-eight layers.</p>
   <p class="ref"><b>Measured here</b>, 2026-08-05. Qwen3.6-35B-A3B-FP8 on one L40S. 333 completion tokens per call became 40 with <span class="mono">enable_thinking=false</span>; <span class="mono">--enforce-eager</span> removed restored CUDA graphs.</p>
-  <aside>Both levers are one line each and neither is the model. This is Act I's claim with our own numbers on it, and it is the strongest slide in the deck for that argument.</aside>
 </section>
 
 <section data-act="III · failure">
   <h3>And the cost of memory</h3>
   <p class="big">If your agent learns from experience,<br>the attacker gets to <span class="bad">write the lesson</span>.</p>
   <p class="ref"><b>Zombie Agents: Persistent Control of Self-Evolving LLM Agents via Self-Reinforcing Injections</b>, arXiv:2602.15654 · <b>MemGuard</b> arXiv:2605.28009</p>
-  <aside>Bridge into the adversary beat.</aside>
 </section>
 
 <section class="center" data-act="III · failure">
   <p class="huge">Two attacks on your own agent.<br>One fails. One works.</p>
   <p class="dim mono" style="margin-top:1.4em">uv run python demos.py hijack --real</p>
-  <aside>RUN IT, and do not preview the outcome.
-
-  Probe 1 carries instructions in capitals. The model refuses: it never opens the document, even though the attacker won the search ranking. Post-training taught it to distrust text addressed to assistants.
-
-  Probe 2 carries no instructions at all. It is a municipal notice that is false, dated later than the real one. The agent reads both, notices the conflict, applies the supersession rule CORRECTLY, and reports the attacker&#39;s number with its reasoning spelled out.
-
-  The line to land: post-training taught it to distrust text that talks to assistants; nothing taught it to distrust a document. Same blindness as 09:05, where it could not tell a stale document from a current one.</aside>
 </section>
 
 <section class="center" data-act="III · failure">
@@ -773,7 +721,6 @@ after      30 tokens: "Parking permit raised to 11,000 AMD on
   <p class="big" style="margin-top:.5em">One leg out of three. It could not have leaked anything.<br>It still told you <span class="bad">14,500 AMD</span>.</p>
   <p class="dim">With all three, an attacker writes <b>2</b>, which makes your agent read <b>1</b> and push it out through <b>3</b>. Any two and that path is broken.</p>
   <p class="ref"><b>Corrupting the answer needs one leg. Stealing the data needs three.</b> The trifecta tells you when your data can leave. It says nothing about whether your agent can be made to lie, which is the harm most of Saturday&#39;s projects actually carry. Widely known as <b>the lethal trifecta</b>, named by Simon Willison, June 2025, so you will meet the phrase again.</p>
-  <aside>Point at the third column. They watched an agent with one leg get compromised, so nobody can leave thinking three boxes ticked means safe. Then ask them to count the legs on their own hackathon idea: a database plus a notification tool is all three.</aside>
 </section>
 
 <section data-act="III · failure">
@@ -782,7 +729,6 @@ after      30 tokens: "Parking permit raised to 11,000 AMD on
   <p class="big" style="margin-top:.8em">Security costs about <span class="warn">seven points</span>.<br>Name your price.</p>
   <p class="dim">FIDES, Progent, RTBAS, FORGE, all enforce policy <span class="acc">outside</span> the model.</p>
   <p class="ref"><b>Defeating Prompt Injections by Design</b> (CaMeL), arXiv:2503.18813, 77% of <b>AgentDojo</b> tasks solved with provable security, against 84% undefended · prompting-based defences fail under camouflage: arXiv:2606.18530</p>
-  <aside>Prompting-based defenses fail under camouflaged injection. MCP's own spec says tool descriptions must be treated as untrusted.</aside>
 </section>
 
 <section data-act="III · failure">
@@ -799,7 +745,6 @@ after      30 tokens: "Parking permit raised to 11,000 AMD on
 <section class="center" data-act="III · failure">
   <p class="huge">The stopping rule.<br>The success predicate.<br>The security policy.</p>
   <p class="big hi" style="margin-top:.6em">One object, three angles.<br>Something outside the model that can say no.</p>
-  <aside>The motif resolves. Build the referee before the player.</aside>
 </section>
 
 <!-- ══════════════════ ACT IV. PRACTICE ══════════════════ -->
@@ -814,7 +759,6 @@ evaluate.py       accuracy · CI · pass^k · tokens · failures
 world/build.py    the world all of it was generated from</pre>
   <p class="dim">Ground truth is correct <span class="hi">by construction</span>, not by inspection.</p>
   <p class="ref"><b>Dvin</b>, capital of Arsacid Armenia from c. 335, seat of the Catholicosate from 484, destroyed 1236. The municipality is fictional; the history is not.</p>
-  <aside>Dvin: capital of Arsacid Armenia from ~335, seat of the Catholicosate from 484, destroyed 1236. Fictional as a municipality on purpose, if the model can answer from memory you are measuring memorisation.</aside>
 </section>
 
 <section data-act="IV · practice">
@@ -825,7 +769,6 @@ world/build.py    the world all of it was generated from</pre>
     <tr><td class="acc">15:35</td><td><b>better <i>and</i> cheaper</b></td><td class="dim">post accuracy and cost together; we read the spread at 16:40</td></tr>
     <tr><td class="acc">16:15</td><td><b>break someone else's</b></td><td class="dim">swap agents, then defend yours</td></tr>
   </table>
-  <aside>Everyone on the board by 14:45 even with a bad score.</aside>
 </section>
 
 <section data-act="IV · practice">
@@ -841,14 +784,12 @@ world/build.py    the world all of it was generated from</pre>
   </table>
   <p class="big" style="margin-top:.8em">Right about everything it can answer.<br><span class="bad">No idea when it can't.</span></p>
   <p class="ref"><b>Measured here</b>, 2026-08-05, <span class="mono">agent_solution.py</span>, 40 tasks × 3 runs, Qwen3.6-35B-A3B-FP8. pass³ = 87.5%, identical to accuracy: fully deterministic at temperature 0</p>
-  <aside>Every single failure is the same failure. "87.5%" tells you none of that. This is the argument for reading the breakdown, made by our own agent.</aside>
 </section>
 
 <section class="center" data-act="IV · practice">
   <p class="huge">Your target: teach it to say<br><span class="hi">&quot;the documents do not say&quot;</span><br>without breaking the other 100%.</p>
   <p class="big dim">The obvious fix will crater everything else.<br>You'll see it happen in the numbers.</p>
   <p class="ref">Baseline measured here, 2026-08-05, 15 unanswerable tasks, 15 failures. The fee genuinely is not published, and it invented one every time</p>
-  <aside>Precision/recall tradeoff discovered by measurement. That IS milestone 3.</aside>
 </section>
 
 <!-- ══════════════════ CLOSE ══════════════════ -->
@@ -858,7 +799,6 @@ world/build.py    the world all of it was generated from</pre>
   <p class="num bad">2.5%</p>
   <p class="big">of 240 real freelance projects completed at human-acceptable quality by the best agent measured.</p>
   <p class="ref"><b>Remote Labor Index</b>, 2026, 240 real Upwork projects, best agent Manus. Failure modes: low-quality output 45.6%, incomplete deliverables 35.7%, file integrity 17.6%</p>
-  <aside>A narrow, well-evaluated tool beats a broad autonomous one, in the jury's eyes and in fact.</aside>
 </section>
 
 <section data-act="close">
@@ -866,7 +806,6 @@ world/build.py    the world all of it was generated from</pre>
   <p class="big">Agent capability transfers when only the <span class="dim">conversation</span> is translated.</p>
   <p class="big bad">It degrades sharply once the <span class="hi">task context</span> is localized.</p>
   <p class="ref"><b>SEATauBench: Adapting Tool-Agent-User Evaluation Into Low-Resource Languages</b>, arXiv:2606.28715 · multilingual models pivot internally through English · cf. <b>MASSIVE-Agents</b>, 52 languages, function selection only</p>
-  <aside>A team building an Armenian agent cannot evaluate it with a translated English eval. Say this slowly.</aside>
 </section>
 
 <section data-act="close">
@@ -892,7 +831,6 @@ world/build.py    the world all of it was generated from</pre>
   </table>
   <p class="big" style="margin-top:.8em">The error names the layer that <span class="acc">noticed</span>,<br>not the layer that <span class="bad">broke</span>.</p>
   <p class="ref"><b>Observed here</b>, 2026-08-04/05, vLLM 0.26.0 on Ubuntu 24.04 + L40S. Causes were <span class="mono">python3.12-dev</span>, <span class="mono">ninja</span>, and <span class="mono">--max-num-seqs</span></p>
-  <aside>Two of those cost an hour each. The third took thirty seconds because it told the truth. Same reason the 09:05 agent said 20,000 AMD with total confidence: the tool reported success and nothing was positioned to notice.</aside>
 </section>
 
 <section class="center" data-act="close">
@@ -900,7 +838,6 @@ world/build.py    the world all of it was generated from</pre>
   <p class="huge">He published the answers<br>with the problems.</p>
   <p class="big dim">A benchmark shipped with its gold set,<br>twelve hundred years before we decided that was optional.</p>
   <p class="ref"><b>Anania Shirakatsi</b>, <i>Questions and Solutions</i> (Խնդիրք եւ լուծմունք), 7th century, the oldest surviving Armenian collection of mathematical problems, published with its answers</p>
-  <aside>The Questions and Solutions, oldest surviving Armenian collection of mathematical problems. Several drawn from municipal life: shares of an inheritance, quantities of grain, the division of a payment.</aside>
 </section>
 
 <section data-act="close">
@@ -921,7 +858,6 @@ world/build.py    the world all of it was generated from</pre>
     <tr><td class="dim">economics</td><td>Remote Labor Index 2026 · EU AI Act 2024/1689</td></tr>
     <tr><td class="dim">measured here</td><td>Qwen3.6-35B-A3B-FP8, one L40S, 2026-08-05</td></tr>
   </table>
-  <aside>Leave this up during questions. Everything unattributed on a slide was measured on our own machines last night.</aside>
 </section>
 
 <section class="center" data-act="close">
@@ -931,7 +867,7 @@ world/build.py    the world all of it was generated from</pre>
 
 <div class="act" id="act"></div>
 <div class="no" id="no"></div>
-<div class="kbd">← → move · <b>n</b> notes · <b>f</b> full · <b>g</b> grid</div>
+<div class="kbd">← → move · <b>f</b> full · <b>g</b> go to slide</div>
 <div class="bar" id="bar"></div>
 
 <script>
@@ -946,7 +882,6 @@ addEventListener('keydown',e=>{
   if(['ArrowRight','PageDown',' '].includes(e.key)){show(i+1);e.preventDefault();}
   else if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);
   else if(e.key==='Home')show(0); else if(e.key==='End')show(S.length-1);
-  else if(e.key==='n')document.body.classList.toggle('notes');
   else if(e.key==='f'){document.fullscreenElement?document.exitFullscreen():
     document.documentElement.requestFullscreen();}
   else if(e.key==='g'){const n=prompt('slide number');if(n)show(parseInt(n)-1);}});
