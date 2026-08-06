@@ -12,7 +12,7 @@
 #
 # Run this ON THE GPU VM, inside tmux:
 #
-#   export HF_TOKEN='hf_...'        # needed to download weights
+#   export HF_TOKEN='hf_...'        # only for gated models, not needed for Qwen
 #   bash serve.sh
 #
 #   MODEL=Qwen/Qwen3.5-4B bash serve.sh   # smaller + much faster to start
@@ -88,10 +88,8 @@ esac
 PARSER="${PARSER:-$DEFAULT_PARSER}"
 REASONING="${REASONING-$DEFAULT_REASONING}"
 
-if [ -z "${HF_TOKEN:-}" ]; then
-	echo "warning: HF_TOKEN is not set; gated weights will fail to download." >&2
-	echo "         export HF_TOKEN='hf_...'" >&2
-fi
+# HF_TOKEN is optional. The Qwen models here are Apache 2.0 and download without
+# it. You only need one for gated repositories, Llama being the usual case.
 
 # Belt and braces: use the PyTorch-native sampler rather than FlashInfer's
 # JIT-compiled one. Costs a little throughput, removes a compile step that

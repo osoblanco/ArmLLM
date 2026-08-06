@@ -15,7 +15,7 @@
 #
 #   MODEL=Qwen/Qwen3.5-4B bash bootstrap.sh   pick the model yourself
 #   SKIP_SERVE=1          bash bootstrap.sh   set up the code only
-#   HF_TOKEN=hf_...       bash bootstrap.sh   for gated weights
+#   HF_TOKEN=hf_...       bash bootstrap.sh   only if you switch to a gated model
 #   MAX_SEQS=32           bash bootstrap.sh   fewer concurrent sequences (default 64)
 #   EAGER=1               bash bootstrap.sh   no CUDA graphs; ~6x slower, less memory
 #   ARMLLM_THINKING=1                         keep reasoning tokens; ~5x slower

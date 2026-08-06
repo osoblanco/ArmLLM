@@ -7,7 +7,6 @@ the code runs on your laptop.** If you get past `llm.py check` you are ready.
 
 ```bash
 ssh student@<your-vm-ip>
-export HF_TOKEN='hf_...'          # your HuggingFace token, for model weights
 tmux new -s vllm                  # so it survives your ssh session
 bash serve.sh
 ```
@@ -116,7 +115,7 @@ OpenAI-compatible hosted API.
 | `Connection refused` | server not up, or it is bound to localhost — `serve.sh` uses `--host 0.0.0.0` for a reason |
 | `NO TOOL CALL RETURNED` | missing `--enable-auto-tool-choice`, or wrong `--tool-call-parser` for the model family |
 | CUDA out of memory | `MAX_LEN=8192 bash serve.sh`, or use `MODEL=Qwen/Qwen3-8B` |
-| weights fail to download | `HF_TOKEN` not exported before `serve.sh` |
+| weights fail to download | only gated models need `HF_TOKEN`; Qwen does not |
 | agent always stops with `max_steps` | it is never calling `finish` — read the system prompt |
 | tool arguments contain stray prose | reasoning text leaking into the parser; add `--reasoning-parser qwen3` |
 | server dies when you close the terminal | you forgot `tmux` |
