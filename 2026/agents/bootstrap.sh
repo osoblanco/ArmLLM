@@ -224,8 +224,16 @@ SERVED_MODEL=""
 if [ "${SKIP_SERVE:-}" = "1" ]; then
 	warn "skipping the model server"
 elif curl -sf "http://localhost:$PORT/v1/models" >/dev/null 2>&1; then
-	ok "a server is already running on port $PORT"
-	SERVED_MODEL="${ARMLLM_MODEL:-$MODEL}"
+	# Ask it what it serves. Never assume it is the model we would have started:
+	# a pre-warmed or leftover server will 404 every request if we guess wrong.
+	SERVED_MODEL=$(curl -sf "http://localhost:$PORT/v1/models" |
+		python3 -c "import sys,json;print(json.load(sys.stdin)['data'][0]['id'])" 2>/dev/null)
+	if [ -z "$SERVED_MODEL" ]; then
+		warn "something is on port $PORT but will not say what it serves; restarting"
+		start_server "$MODEL" "" || die "could not start a server. $(log_reason)"
+	else
+		ok "a server is already running on port $PORT, serving $SERVED_MODEL"
+	fi
 else
 	# The ladder: ideal, then memory-safe, then a small model that always fits.
 	if start_server "$MODEL" ""; then :
